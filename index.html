@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fa-solid fa-box-open"></i>
+                <span>Inventory</span>
+            </div>
+            <nav>
+                <ul>
+                    <li class="active" onclick="showSection('dashboard')">
+                        <i class="fa-solid fa-chart-pie"></i> Dashboard
+                    </li>
+                    <li onclick="showSection('inventory')">
+                        <i class="fa-solid fa-list"></i> Inventory
+                    </li>
+                    <li onclick="window.location.href='/logout'">
+                        <i class="fa-solid fa-sign-out-alt"></i> Logout
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header>
+                <h1>Dashboard</h1>
+                <button class="btn-primary" onclick="openModal()">
+                    <i class="fa-solid fa-plus"></i> Add Product
+                </button>
+            </header>
+
+            <section id="dashboard" class="content-section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="icon"><i class="fa-solid fa-boxes-stacked"></i></div>
+                        <div class="info">
+                            <h3>Total Products</h3>
+                            <p id="total-products">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon"><i class="fa-solid fa-dollar-sign"></i></div>
+                        <div class="info">
+                            <h3>Total Value</h3>
+                            <p id="total-value">Rs 0.00</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                        <div class="info">
+                            <h3>Low Stock</h3>
+                            <p id="low-stock">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="charts-container" style="display: flex; gap: 20px; margin-bottom: 30px;">
+                    <div class="chart-card"
+                        style="flex: 1; background: var(--card-bg); padding: 20px; border-radius: 16px; border: var(--glass-border);">
+                        <h3>Stock Distribution</h3>
+                        <canvas id="stockChart"></canvas>
+                    </div>
+                    <div class="history-card"
+                        style="flex: 1; background: var(--card-bg); padding: 20px; border-radius: 16px; border: var(--glass-border);">
+                        <h3>Recent Activity</h3>
+                        <ul id="history-list"
+                            style="list-style: none; margin-top: 15px; max-height: 300px; overflow-y: auto;">
+                            <!-- History items -->
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="inventory" class="content-section">
+                <div class="table-header"
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2>Product List</h2>
+                    <button class="btn-primary" onclick="exportCSV()">
+                        <i class="fa-solid fa-file-csv"></i> Export CSV
+                    </button>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="product-table-body">
+                            <!-- Rows will be populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title">Add Product</h2>
+            <form id="product-form">
+                <input type="hidden" id="product-id">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <input type="text" id="category" required>
+                </div>
+                <div class="form-group">
+                    <label>Quantity</label>
+                    <input type="number" id="quantity" required>
+                </div>
+                <div class="form-group">
+                    <label>Price</label>
+                    <input type="number" step="0.01" id="price" required>
+                </div>
+                <button type="submit" class="btn-primary">Save Product</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>
